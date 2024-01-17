@@ -115,10 +115,10 @@ app.post('/data', upload.single('file'), async (req, res) => {
 
   } else if(objPost.type == 'llava' ){
     if (uploadedFile) {
-      console.log(objPost.data);
+      //console.log(objPost.data);
       // Suponiendo que el campo de archivo contiene datos de imagen codificados en base64
       const base64Data = uploadedFile.buffer.toString('base64');
-      console.log(base64Data);
+      
 
       const responses = [];
       // Enviar datos a la otra API usando axios

@@ -184,9 +184,17 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
                             Expanded(
                               child: TextField(
                                 controller: _textController,
-                                onSubmitted: (text) {
-                                  _sendMessage(appData);
+                                onSubmitted: (text) async {
+
                                   _scrollToBottom();
+                                  if (imagen != null){
+                                    await uploadFile(appData,_textController.text);
+                                    imagen = null;
+                                  }else if (imagen == null ){
+                                    _sendMessage(appData);
+                                  }
+
+
                                 },
                                 decoration: InputDecoration(
                                   hintText: 'Escribe tu mensaje...',
@@ -217,7 +225,10 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
                               children: [
                                 // Button to send
                                 buildIconButton(Icons.send, () {
-                                  _sendMessage(appData);
+                                  _scrollToBottom();
+                                  if (imagen == null ){
+                                    _sendMessage(appData);
+                                  }
                                 }),
                                 SizedBox(width: 8),
                                 // Button to upload a file (image)
@@ -227,7 +238,7 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
                                     setState(() {
                                       imagen = selectedFile;
                                     });
-                                    await uploadFile(appData,_textController.text);
+
 
                                   }
                                 }),
@@ -251,6 +262,9 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
   void load(AppData appData,String text,String type, {File? selectedFile} ) async {
     switch (type) {
       case 'POST':
+        setState(() {
+          generatingMessage = true;
+        });
 
         var dataPost = await loadHttpPostByChunks(
             'http://localhost:3000/data', selectedFile!,text);
