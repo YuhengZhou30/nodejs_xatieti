@@ -61,7 +61,6 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
   Future<void> uploadFile(AppData appData,String text) async {
     try {
       if (imagen != null) {
-        print("object");
         load(appData,text,"POST", selectedFile: imagen!);
       }
     } catch (e) {
@@ -147,9 +146,10 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
                               ),
                             ),
 
+
                             SizedBox(height: 4), // Espacio entre elementos
                             Divider(
-                                color: Colors.grey[300],
+                                color: Colors.black,
                                 height: 1), // Añade espacio entre mensajes
                           ],
                         );
@@ -225,13 +225,16 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
                                 : Row(
                               children: [
                                 // Button to send
-                                buildIconButton(Icons.send, () {
+                                buildIconButton(Icons.send, () async {
                                   _scrollToBottom();
-                                  if (imagen == null ){
+                                  if (imagen != null){
+                                    await uploadFile(appData,_textController.text);
+                                    imagen = null;
+                                  }else if (imagen == null ){
                                     _sendMessage(appData);
                                   }
                                 }),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 // Button to upload a file (image)
                                 buildIconButton(Icons.file_upload, () async {
                                   File? selectedFile = await pickFile();
@@ -294,7 +297,6 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
 
   Future<String> loadHttpPostByChunks(String url, File file, String text) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    print(text);
     // Agregar los datos JSON como parte del formulario
     request.fields['data'] = '{"type":"llava"}';
 

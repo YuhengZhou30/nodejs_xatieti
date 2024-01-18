@@ -68,7 +68,6 @@ app.post('/data', upload.single('file'), async (req, res) => {
   let objPost = {};
 
   try {
-    console.log('textPost.data:', textPost);  // Agrega esta línea para imprimir el contenido
     objPost = JSON.parse(textPost.data);
   } catch (error) {
     console.log('Error parsing JSON:', error);  // Agrega esta línea para imprimir el error
@@ -78,9 +77,7 @@ app.post('/data', upload.single('file'), async (req, res) => {
 
 
   if (objPost.type == 'mistral' && objPost.mensaje) {
-    console.log(true);
     try {
-      console.log(objPost.mensaje);
       // Utiliza el mensaje proporcionado en lugar del prompt fijo
       const apiResponse = await axios.post('http://localhost:11434/api/generate', {
         model: 'mistral',
@@ -103,7 +100,6 @@ app.post('/data', upload.single('file'), async (req, res) => {
         type: 'respuesta',
         mensaje: responses.map(response => response.response).join(''),
       };
-      console.log(jsonResponse.mensaje);
       // Envía el objeto JSON como respuesta
       res.status(200).json(jsonResponse);
       responses.clear;
@@ -132,7 +128,6 @@ app.post('/data', upload.single('file'), async (req, res) => {
 
         const response = await axios.post(apiUrl, requestData);
 
-        console.log('Response from API:');
         const responses = [];
         response.data.split('\n').forEach(line => {
           if (line.trim() !== '') {
