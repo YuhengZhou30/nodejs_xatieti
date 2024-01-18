@@ -61,6 +61,7 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
   Future<void> uploadFile(AppData appData,String text) async {
     try {
       if (imagen != null) {
+        print("object");
         load(appData,text,"POST", selectedFile: imagen!);
       }
     } catch (e) {
@@ -260,14 +261,20 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
   }
 
   void load(AppData appData,String text,String type, {File? selectedFile} ) async {
+    String texto = _textController.text;
+    if (texto.isEmpty){
+      texto = "What is in the picture?";
+    }
+    appData.addMessage(texto);
     switch (type) {
       case 'POST':
+
+
         setState(() {
           generatingMessage = true;
         });
-
         var dataPost = await loadHttpPostByChunks(
-            'http://localhost:3000/data', selectedFile!,text);
+            'http://localhost:3000/data', selectedFile!,texto);
 
         Map<String, dynamic> jsonResponse = json.decode(dataPost);
 
@@ -279,13 +286,15 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
         setState(() {
           generatingMessage = false;
         });
+
+        _textController.clear();
         break;
     }
   }
 
   Future<String> loadHttpPostByChunks(String url, File file, String text) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-
+    print(text);
     // Agregar los datos JSON como parte del formulario
     request.fields['data'] = '{"type":"llava"}';
 
@@ -311,7 +320,7 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
         // La solicitud ha sido exitosa
         var responseData = await response.stream.toBytes();
         var responseString = utf8.decode(responseData);
-        print("Todo bien por mi parte");
+
         return responseString;
       } else {
         // La solicitud ha fallado

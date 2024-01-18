@@ -119,14 +119,14 @@ app.post('/data', upload.single('file'), async (req, res) => {
       // Suponiendo que el campo de archivo contiene datos de imagen codificados en base64
       const base64Data = uploadedFile.buffer.toString('base64');
       
-
+  
       const responses = [];
       // Enviar datos a la otra API usando axios
       try {
         const apiUrl = 'http://localhost:11434/api/generate';
         const requestData = {
           model: 'llava',
-          prompt: 'Que hay en esta foto',
+          prompt: "what is in the picture?",
           images: [base64Data],
         };
 
