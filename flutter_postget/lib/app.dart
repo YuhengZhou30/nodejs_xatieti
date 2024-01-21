@@ -25,7 +25,6 @@ class AppState extends State<App> {
   Widget build(BuildContext context) {
     // Farem servir la base 'Cupertino'
     return CupertinoApp(
-      debugShowCheckedModeBanner: false,
       theme: const CupertinoThemeData(brightness: Brightness.light),
       home: _setLayout(context),
     );

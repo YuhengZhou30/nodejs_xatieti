@@ -90,8 +90,7 @@ class _LayoutDesktopState extends State<LayoutDesktop> {
             height: 800,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Colors.grey[200], // Fondo del contenedor
-              borderRadius: BorderRadius.circular(16.0),
+              color: Color.fromARGB(255, 103, 150, 250),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
